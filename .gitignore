@@ -1,0 +1,112 @@
+
+
+require(forecast)
+require(fpp)
+gruma<- read.csv("C:\\Users\\anak0\\Desktop\\grumma.csv", header = TRUE)
+grum<-ts(gruma[,1], start=2010, frequency = 12)
+plot(grum)
+
+
+modHL<-holt(grum,initial="simple",h=12)
+modHE<-holt(grum,initial="simple",exponential = T,h=12)
+modAA<-holt(grum,damped = T)
+modMA<-holt(grum,damped = T,exponential = T)
+modHWA<-hw(grum,seasonal = "additive")
+modHWM<-hw(grum,seasonal = "multiplicative")
+plot(modHL, plot.conf= FALSE, ylab= "precios cierre gruma", xlab="year", main="", fcol= "white", type="o")
+
+####graficando####
+lines(fitted(modHL), col="blue", type="o")
+lines(fitted(modHE), col="red", type="o")
+lines(fitted(modAA), col="green", type="o")
+lines(fitted(modHWA), col="yellow", type="o")
+lines(fitted(modHWM), col="orange", type="o")
+
+
+###graficando ajustados
+lines(modHL$mean, col="blue", type="o")
+lines(modHE$mean, col="red", type="o")
+lines(modAA$mean, col="green", type="o")
+lines(modHWA$mean, col="yellow", type="o")
+lines(modHWM$mean, col="orange", type="o")
+
+legend("topleft",lty=1, col=c(1,"blue","red","green","yellow", "orange"), 
+       c("data", expression(HL), expression(HE),expression(AA), expression(HWA),expression(HWM)),pch=1)
+
+
+
+GRUMpro<-meanf(grum,12)####meanf
+GRUMnai<-naive(grum,12)#### ingenuo 
+GRUMnaiES<-snaive(grum,12)#### ingenuo estacional
+GRUMder<-rwf(grum,12,drift=TRUE)### metodo deriva
+
+
+
+###evaluando cada metodo
+#meanf
+evalmeanf<-accuracy(GRUMpro)
+evalmeanf
+#ingenio
+evaling<-accuracy(GRUMnai)
+evaling
+#ingenio estacional 
+evalsnai<-accuracy(GRUMnaiES)
+evalsnai
+#metodo de la deriva
+evalder<-accuracy(GRUMder)
+evalder
+
+######################################################################
+
+ica<- read.csv("C:\\Users\\anak0\\Desktop\\ica.csv", header = TRUE)
+icas<-ts(ica[,2], start=2013, end = 2016, frequency = 12)
+plot(icas)
+
+modHL1<-holt(icas,initial="simple",h=12)
+modHE1<-holt(icas,initial="simple",exponential = T,h=12)
+modAA1<-holt(icas,damped = T)
+modMA1<-holt(icas,damped = T,exponential = T)
+modHWA1<-hw(icas,seasonal = "additive")
+modHWM1<-hw(icas,seasonal = "multiplicative")
+plot(modHL1, plot.conf= FALSE, ylab= "precios cierre ica", xlab="year", main="", fcol= "white", type="o")
+
+####graficando####
+lines(fitted(modHL1), col="blue", type="o")
+lines(fitted(modHE1), col="red", type="o")
+lines(fitted(modAA1), col="green", type="o")
+lines(fitted(modHWA1), col="yellow", type="o")
+lines(fitted(modHWM1), col="orange", type="o")
+
+
+###graficando ajustados
+lines(modHL1$mean, col="blue", type="o")
+lines(modHE1$mean, col="red", type="o")
+lines(modAA1$mean, col="green", type="o")
+lines(modHWA1$mean, col="yellow", type="o")
+lines(modHWM1$mean, col="orange", type="o")
+
+legend("topleft",lty=1, col=c(1,"blue","red","green","yellow", "orange"), 
+       c("data", expression(HL), expression(HE),expression(AA), expression(HWA),expression(HWM)),pch=1)
+
+
+
+icapro<-meanf(icas,12)####meanf
+icanai<-naive(icas,12)#### ingenuo 
+icanaiES<-snaive(icas,12)#### ingenuo estacional
+icader<-rwf(icas,12,drift=TRUE)### metodo deriva
+
+
+
+###evaluando cada metodo
+#meanf
+evalmeanf1<-accuracy(icapro)
+evalmeanf1
+#ingenio
+evaling1<-accuracy(icanai)
+evaling1
+#ingenio estacional 
+evalsnai1<-accuracy(icanaiES)
+evalsnai1
+#metodo de la deriva
+evalder1<-accuracy(icader)
+evalder1
